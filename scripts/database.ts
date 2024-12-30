@@ -62,19 +62,29 @@ const checkLogin = async () => {
   return "";
 };
 
-const login = async () => {
+const login = async (username: string, password: string) => {
   const db = await SQLite.openDatabaseAsync(dbName);
-
-  await db.runAsync(
-    "UPDATE users SET logged_in = ? WHERE username = ?",
-    1,
-    "admin",
-  );
+  
+  const result: User | null = await db.getFirstAsync("SELECT * FROM users WHERE username = ?", username);
+  if (result && result.password === password) {
+    await db.runAsync(
+      "UPDATE users SET logged_in = ? WHERE username = ?",
+      1,
+      username,
+    );
+    return true;
+  }
+  return false;
 };
 
 const logout = async () => {
   const db = await SQLite.openDatabaseAsync(dbName);
 
+  await db.runAsync(
+    "UPDATE users SET logged_in = ? WHERE username = ?",
+    0,
+    "user",
+  );
   await db.runAsync(
     "UPDATE users SET logged_in = ? WHERE username = ?",
     0,

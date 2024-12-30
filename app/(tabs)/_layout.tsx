@@ -46,6 +46,7 @@ function TabLayout() {
               onPress={logoutUser}
               name="log-out"
               size={28}
+              style={{ paddingRight: 12 }}
             />
           ),
           title: "Appointments",

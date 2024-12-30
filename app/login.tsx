@@ -10,7 +10,7 @@ import { Text } from "@/components/ui/text";
 import { login } from "@/scripts/database";
 
 const schema = z.object({
-  email: z.coerce.string().trim().email({ message: "Email is invalid." }),
+  username: z.coerce.string().trim().min(1, { message: "Email is invalid." }),
   password: z.coerce
     .string()
     .trim()
@@ -21,39 +21,44 @@ function Login() {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
   const router = useRouter();
 
-  const loginUser = async () => {
-    await login();
-    router.replace("/");
+  const loginUser = async (data: z.infer<typeof schema>) => {
+    const result = await login(data.username, data.password);
+    if (result) {
+      router.replace("/");
+    } else {
+      setError("root.serverError", { type: "403" });
+    }
   };
 
   return (
     <View className="flex flex-col h-screen justify-center px-8">
       <Controller
         control={control}
-        name="email"
+        name="username"
         rules={{ required: true }}
         render={({ field: { onBlur, onChange, value } }) => (
           <Input
-            className="bg-slate-50"
-            placeholder="Email"
+            className="bg-slate-50 text-black"
+            placeholder="Username"
             onBlur={onBlur}
-            onChange={onChange}
+            onChangeText={onChange}
             value={value}
           />
         )}
       />
-      {errors.email ? (
-        <Text className="text-white mb-4">{errors.email.message}</Text>
+      {errors.username ? (
+        <Text className="text-white mb-4">{errors.username.message}</Text>
       ) : (
         <Text className="text-white mb-4"> </Text>
       )}
@@ -64,10 +69,10 @@ function Login() {
         rules={{ required: true }}
         render={({ field: { onBlur, onChange, value } }) => (
           <Input
-            className="bg-slate-50"
+            className="bg-slate-50 text-black"
             placeholder="Password"
             onBlur={onBlur}
-            onChange={onChange}
+            onChangeText={onChange}
             textContentType="password"
             value={value}
           />
@@ -79,9 +84,15 @@ function Login() {
         <Text className="text-white mb-4"> </Text>
       )}
 
-      <Button className="bg-blue-600" onPress={handleSubmit(loginUser)}>
+      <Button className="bg-blue-600 mb-4" onPress={handleSubmit(loginUser)}>
         <Text className="font-SpaceMono text-white">Login</Text>
       </Button>
+
+      {errors.root?.serverError.type === "403" && (
+        <Text className="w-full text-center text-white">
+          Email or Password is incorrect.
+        </Text>
+      )}
     </View>
   );
 }
