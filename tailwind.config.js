@@ -1,4 +1,4 @@
-const { hairlineWidth } = require('nativewind/theme');
+const { hairlineWidth, platformSelect } = require('nativewind/theme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -44,6 +44,9 @@ module.exports = {
       },
       borderWidth: {
         hairline: hairlineWidth(),
+      },
+      fontFamily: {
+        SpaceMono: ["SpaceMono"],
       },
       keyframes: {
         'accordion-down': {

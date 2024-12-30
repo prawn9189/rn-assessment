@@ -1,6 +1,9 @@
 import { useRouter } from "expo-router";
-import { Button, StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
 import { login } from "@/scripts/database";
 
 function Login() {
@@ -12,19 +15,18 @@ function Login() {
   };
 
   return (
-    <View style={styles.container}>
-      <Button onPress={loginUser} title="Login" />
+    <View className="flex flex-col h-screen justify-center px-8">
+      <Input className="bg-slate-50 mb-8" placeholder="Email" />
+      <Input
+        className="bg-slate-50 mb-8"
+        placeholder="Password"
+        textContentType="password"
+      />
+      <Button className="bg-blue-600" onPress={loginUser}>
+        <Text className="font-SpaceMono text-white">Login</Text>
+      </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-    padding: 8,
-  },
-});
 
 export default Login;
