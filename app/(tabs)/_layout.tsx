@@ -41,7 +41,12 @@ function TabLayout() {
           ),
           headerShown: true,
           headerRight: () => (
-            <FeatherIcons onPress={logoutUser} name="log-out" size={28} />
+            <FeatherIcons
+              color="white"
+              onPress={logoutUser}
+              name="log-out"
+              size={28}
+            />
           ),
           title: "Appointments",
         }}
@@ -64,7 +69,7 @@ function TabLayout() {
           name="reviews"
           options={{
             tabBarIcon: ({ color }) => (
-              <FeatherIcons color={color} name="plus" size={28} />
+              <FeatherIcons color={color} name="star" size={28} />
             ),
             title: "Reviews",
           }}
