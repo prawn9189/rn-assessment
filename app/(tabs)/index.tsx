@@ -1,11 +1,8 @@
 import { Redirect } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 import { checkLogin, initDB, seedData } from "@/scripts/database";
-
-SplashScreen.preventAutoHideAsync();
 
 function Appointments() {
   const [authUser, setAuthUser] = useState<string>();
