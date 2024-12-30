@@ -17,7 +17,14 @@ function RootLayout() {
       <Stack>
         <Stack.Screen
           name="(tabs)"
-          options={{ headerShown: false, title: "Appointments" }}
+          options={{
+            headerShown: false,
+            title: "Appointments",
+          }}
+        />
+        <Stack.Screen
+          name="login"
+          options={{ headerShown: false, title: "Login" }}
         />
         <Stack.Screen name="+not-found" />
       </Stack>
