@@ -19,6 +19,13 @@ export type Appt = {
   status: string;
 };
 
+export type Rating = {
+  id?: number;
+  sum: number;
+  total: number;
+  avg: number;
+};
+
 const dbName = "appointment.db" as const;
 
 const initDB = async () => {
@@ -55,10 +62,17 @@ const seedData = async () => {
   const db = await SQLite.openDatabaseAsync(dbName);
 
   const allUsers: User[] = await db.getAllAsync("SELECT * FROM users");
+
   if (!allUsers.length) {
     await db.execAsync(`
       INSERT INTO users (id, username, password, logged_in) VALUES (1, 'user', 'password', 1);
       INSERT INTO users (id, username, password, logged_in) VALUES (2, 'admin', 'password', 0);
+    `);
+  }
+  const rating: Rating | null = await db.getFirstAsync("SELECT * FROM users");
+  if (rating === null) {
+    await db.execAsync(`
+      INSERT INTO reviews (sum, total, avg) VALUES (0, 0, 0.0);
     `);
   }
 };
@@ -118,7 +132,7 @@ const saveAppt = async ({
   time,
 }: Appt) => {
   const db = await SQLite.openDatabaseAsync(dbName);
-  await db.runAsync(
+  const result = await db.runAsync(
     `
     INSERT INTO appointments (
       patient, contact, date, time, reason, review, status
@@ -132,6 +146,7 @@ const saveAppt = async ({
     review,
     status,
   );
+  return result.lastInsertRowId;
 };
 
 const getALlAppts = async () => {
@@ -140,4 +155,42 @@ const getALlAppts = async () => {
   return result;
 };
 
-export { checkLogin, getALlAppts, initDB, login, logout, saveAppt, seedData };
+const saveRating = async ({
+  apptID,
+  rating,
+}: { apptID: number; rating: number }) => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  await db.runAsync(
+    "UPDATE appointments SET review = ? WHERE id = ?",
+    rating,
+    apptID,
+  );
+  await db.runAsync(
+    "UPDATE reviews SET sum = sum + ?, total = total + ? WHERE id = ?",
+    rating,
+    1,
+    1,
+  );
+  await db.runAsync(
+    "UPDATE reviews SET avg = (sum * 1.0) / total WHERE id = ?",
+    1,
+  );
+};
+
+const getRating = async () => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  const result: Rating | null = await db.getFirstAsync("SELECT * FROM reviews");
+  return result;
+};
+
+export {
+  checkLogin,
+  getALlAppts,
+  getRating,
+  initDB,
+  login,
+  logout,
+  saveAppt,
+  saveRating,
+  seedData,
+};
