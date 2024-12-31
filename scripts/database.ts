@@ -64,8 +64,11 @@ const checkLogin = async () => {
 
 const login = async (username: string, password: string) => {
   const db = await SQLite.openDatabaseAsync(dbName);
-  
-  const result: User | null = await db.getFirstAsync("SELECT * FROM users WHERE username = ?", username);
+
+  const result: User | null = await db.getFirstAsync(
+    "SELECT * FROM users WHERE username = ?",
+    username,
+  );
   if (result && result.password === password) {
     await db.runAsync(
       "UPDATE users SET logged_in = ? WHERE username = ?",

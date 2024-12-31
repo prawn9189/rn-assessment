@@ -1,6 +1,7 @@
 import { NAV_THEME } from "@/constants/colors";
 import { useColorScheme } from "@/scripts/useColorScheme";
 import { Theme, ThemeProvider } from "@react-navigation/native";
+import { PortalHost } from "@rn-primitives/portal";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -64,6 +65,7 @@ function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+      <PortalHost />
     </ThemeProvider>
   );
 }
