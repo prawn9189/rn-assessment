@@ -1,9 +1,22 @@
 import * as SQLite from "expo-sqlite";
 
 export type User = {
+  id?: number;
   username: string;
   password: string;
   logged_in: number;
+};
+
+export type Appt = {
+  id?: number;
+  patient: string;
+  contact: string;
+  date: string;
+  time: string;
+  reason: string;
+  notify?: number;
+  review: number;
+  status: string;
 };
 
 const dbName = "appointment.db" as const;
@@ -19,7 +32,7 @@ const initDB = async () => {
       logged_in INTEGER DEFAULT 0
     );
     CREATE TABLE IF NOT EXISTS appointments (
-      id INTEGER PRIMARY KEY NOT NULL,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       patient TEXT NOT NULL,
       contact TEXT NOT NULL,
       date TEXT NOT NULL,
@@ -30,7 +43,7 @@ const initDB = async () => {
       status TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS reviews (
-      id INTEGER PRIMARY KEY NOT NULL,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       sum INTEGER NOT NULL,
       total INTEGER NOT NULL,
       avg REAL NOT NULL
@@ -95,4 +108,36 @@ const logout = async () => {
   );
 };
 
-export { checkLogin, initDB, login, logout, seedData };
+const saveAppt = async ({
+  contact,
+  date,
+  patient,
+  reason,
+  review,
+  status,
+  time,
+}: Appt) => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  await db.runAsync(
+    `
+    INSERT INTO appointments (
+      patient, contact, date, time, reason, review, status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?);
+  `,
+    patient,
+    contact,
+    date,
+    time,
+    reason,
+    review,
+    status,
+  );
+};
+
+const getALlAppts = async () => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  const result = await db.getAllAsync("SELECT * FROM appointments");
+  return result;
+};
+
+export { checkLogin, getALlAppts, initDB, login, logout, saveAppt, seedData };

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
+import { saveAppt } from "@/scripts/database";
 
 import type { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import type { Option } from "@rn-primitives/select";
@@ -42,7 +44,6 @@ function NewAppointment() {
   const {
     control,
     handleSubmit,
-    setError,
     setValue,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
@@ -56,6 +57,8 @@ function NewAppointment() {
     },
   });
 
+  const router = useRouter();
+
   const onDateChange = (_event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate;
     setValue("date", currentDate!.toLocaleDateString());
@@ -63,6 +66,16 @@ function NewAppointment() {
 
   const createAppointment = async (data: z.infer<typeof schema>) => {
     console.log(data);
+    await saveAppt({
+      patient: data.patientName,
+      contact: data.contactNo,
+      date: data.date,
+      time: data.time,
+      reason: data.reason,
+      review: 0,
+      status: "upcoming",
+    });
+    router.navigate("/");
   };
 
   const dateFieldOnFocus = () => {
@@ -143,7 +156,7 @@ function NewAppointment() {
         render={() => (
           <Select className="w-full" onValueChange={onTimeChange}>
             <SelectTrigger className="bg-slate-50">
-              <SelectValue className="text-xl" placeholder="Select time" />
+              <SelectValue className="text-lg" placeholder="Select time" />
             </SelectTrigger>
             <SelectContent className="w-5/6 bg-slate-50">
               <SelectGroup>
