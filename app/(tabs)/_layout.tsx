@@ -57,6 +57,7 @@ function TabLayout() {
           component={NewAppointment}
           name="new-appointment"
           options={{
+            headerTitle: "Create New Appointment",
             tabBarIcon: ({ color }) => (
               <FeatherIcons color={color} name="plus" size={28} />
             ),

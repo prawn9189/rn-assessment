@@ -62,6 +62,10 @@ function RootLayout() {
           name="login"
           options={{ headerShown: false, title: "Login" }}
         />
+        <Stack.Screen
+          name="ratings/[appt]"
+          options={{ headerShown: false, title: "Rate System" }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style={isDarkColorScheme ? "light" : "dark"} />

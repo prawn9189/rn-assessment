@@ -1,4 +1,4 @@
-import { Redirect, useSegments } from "expo-router";
+import { Redirect, useRouter, useSegments } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 
@@ -6,19 +6,21 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { checkLogin, getALlAppts, initDB, seedData } from "@/scripts/database";
+import { checkLogin, getALlAppts, getRating, initDB, seedData } from "@/scripts/database";
 
-import type { Appt } from "@/scripts/database";
+import type { Appt, Rating } from "@/scripts/database";
 
 function Appointments() {
   const [authUser, setAuthUser] = useState<string>();
   const [appts, setAppts] = useState<Appt[]>([]);
+  const [rating, setRating] = useState({});
+
+  const router = useRouter();
 
   const segments = useSegments();
 
@@ -37,10 +39,16 @@ function Appointments() {
     setAppts(result as Appt[]);
   }, [getALlAppts]);
 
+  const getRatings = useCallback(async () => {
+    const result = await getRating();
+    setRating(result as Rating);
+  }, [getRating]);
+
   useEffect(() => {
     init();
     getAuthUser();
     getAppts();
+    getRatings();
   }, []);
 
   /* Fetch on route change */
@@ -52,7 +60,9 @@ function Appointments() {
     return <Redirect href="/login" />;
   }
 
-  const viewAppt = () => {};
+  const viewAppt = (apptID: number) => {
+    router.replace(`/ratings/${apptID}`);
+  };
 
   return (
     <View>
@@ -67,7 +77,7 @@ function Appointments() {
               <Text className="w-1/2">{appt.reason}</Text>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" onPress={viewAppt}>
+              <Button className="w-full" onPress={() => viewAppt(appt.id as number)}>
                 <Text>View</Text>
               </Button>
             </CardFooter>

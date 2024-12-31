@@ -65,8 +65,7 @@ function NewAppointment() {
   };
 
   const createAppointment = async (data: z.infer<typeof schema>) => {
-    console.log(data);
-    await saveAppt({
+    const apptID = await saveAppt({
       patient: data.patientName,
       contact: data.contactNo,
       date: data.date,
@@ -75,7 +74,7 @@ function NewAppointment() {
       review: 0,
       status: "upcoming",
     });
-    router.navigate("/");
+    router.navigate(`/ratings/${apptID}`);
   };
 
   const dateFieldOnFocus = () => {

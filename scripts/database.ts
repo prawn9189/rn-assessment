@@ -179,7 +179,7 @@ const saveRating = async ({
 
 const getRating = async () => {
   const db = await SQLite.openDatabaseAsync(dbName);
-  const result: Rating | null = await db.getFirstAsync("SELECT * FROM reviews");
+  const result = await db.getFirstAsync("SELECT * FROM reviews");
   return result;
 };
 
