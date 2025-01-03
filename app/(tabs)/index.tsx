@@ -3,22 +3,15 @@ import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { checkLogin, getALlAppts, getRating, initDB, seedData } from "@/scripts/database";
+import { checkLogin, getAllAppts, initDB, seedData } from "@/scripts/database";
 
-import type { Appt, Rating } from "@/scripts/database";
+import type { Appt } from "@/scripts/database";
 
 function Appointments() {
   const [authUser, setAuthUser] = useState<string>();
   const [appts, setAppts] = useState<Appt[]>([]);
-  const [rating, setRating] = useState({});
 
   const router = useRouter();
 
@@ -35,20 +28,14 @@ function Appointments() {
   }, []);
 
   const getAppts = useCallback(async () => {
-    const result = await getALlAppts();
+    const result = await getAllAppts();
     setAppts(result as Appt[]);
-  }, [getALlAppts]);
-
-  const getRatings = useCallback(async () => {
-    const result = await getRating();
-    setRating(result as Rating);
-  }, [getRating]);
+  }, [getAllAppts]);
 
   useEffect(() => {
     init();
     getAuthUser();
     getAppts();
-    getRatings();
   }, []);
 
   /* Fetch on route change */
@@ -61,7 +48,7 @@ function Appointments() {
   }
 
   const viewAppt = (apptID: number) => {
-    router.replace(`/ratings/${apptID}`);
+    router.navigate({ pathname: "/appointment", params: { id: apptID } });
   };
 
   return (
@@ -72,12 +59,11 @@ function Appointments() {
             <CardHeader>
               <CardTitle>{appt.patient}</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-row justify-between">
-              <Text className="w-1/2 text-zinc-400">Reason</Text>
-              <Text className="w-1/2">{appt.reason}</Text>
-            </CardContent>
             <CardFooter>
-              <Button className="w-full" onPress={() => viewAppt(appt.id as number)}>
+              <Button
+                className="w-full"
+                onPress={() => viewAppt(appt.id as number)}
+              >
                 <Text>View</Text>
               </Button>
             </CardFooter>

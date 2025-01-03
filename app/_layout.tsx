@@ -1,5 +1,3 @@
-import { NAV_THEME } from "@/constants/colors";
-import { useColorScheme } from "@/scripts/useColorScheme";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
 import { useFonts } from "expo-font";
@@ -7,6 +5,9 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { useEffect } from "react";
+
+import { NAV_THEME } from "@/constants/colors";
+import { useColorScheme } from "@/scripts/useColorScheme";
 
 import "@/global.css";
 

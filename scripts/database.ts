@@ -149,10 +149,31 @@ const saveAppt = async ({
   return result.lastInsertRowId;
 };
 
-const getALlAppts = async () => {
+const getAllAppts = async () => {
   const db = await SQLite.openDatabaseAsync(dbName);
   const result = await db.getAllAsync("SELECT * FROM appointments");
   return result;
+};
+
+const getApptByID = async (id: number) => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  const result = await db.getFirstAsync(
+    "SELECT * FROM appointments WHERE id = ?",
+    id,
+  );
+  return result;
+};
+
+const updateApptStatus = async ({
+  id,
+  status,
+}: { id: number; status: string }) => {
+  const db = await SQLite.openDatabaseAsync(dbName);
+  await db.runAsync(
+    "UPDATE appointments SET status = ? WHERE id = ?",
+    status,
+    id,
+  );
 };
 
 const saveRating = async ({
@@ -185,7 +206,8 @@ const getRating = async () => {
 
 export {
   checkLogin,
-  getALlAppts,
+  getAllAppts,
+  getApptByID,
   getRating,
   initDB,
   login,
@@ -193,4 +215,5 @@ export {
   saveAppt,
   saveRating,
   seedData,
+  updateApptStatus,
 };

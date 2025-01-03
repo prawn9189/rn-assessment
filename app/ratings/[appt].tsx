@@ -16,7 +16,7 @@ function Rating() {
   const router = useRouter();
 
   const submitRating = async () => {
-    await saveRating({ apptID: parseInt(appt as string), rating: rating});
+    await saveRating({ apptID: parseInt(appt as string), rating: rating });
     router.replace("/");
   };
 
@@ -33,7 +33,7 @@ function Rating() {
           rating={rating}
         />
         <Button className="mt-6" onPress={submitRating}>
-          <Text>Go abck</Text> 
+          <Text>Go abck</Text>
         </Button>
       </View>
     </SafeAreaView>

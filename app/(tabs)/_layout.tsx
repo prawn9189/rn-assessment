@@ -1,15 +1,8 @@
 import FeatherIcons from "@expo/vector-icons/Feather";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useRouter } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 
 import { checkLogin, logout } from "@/scripts/database";
-
-import Appointments from "./index";
-import NewAppointment from "./new-appointment";
-import Reviews from "./reviews";
-
-const Tab = createBottomTabNavigator();
 
 function TabLayout() {
   const [authUser, setAuthUser] = useState<string>();
@@ -30,10 +23,13 @@ function TabLayout() {
     router.replace("/login");
   };
 
+  const backToAppts = () => {
+    router.replace("/(tabs)");
+  };
+
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        component={Appointments}
+    <Tabs>
+      <Tabs.Screen
         name="index"
         options={{
           tabBarIcon: ({ color }) => (
@@ -52,32 +48,43 @@ function TabLayout() {
           title: "Appointments",
         }}
       />
-      {authUser === "user" && (
-        <Tab.Screen
-          component={NewAppointment}
-          name="new-appointment"
-          options={{
-            headerTitle: "Create New Appointment",
-            tabBarIcon: ({ color }) => (
-              <FeatherIcons color={color} name="plus" size={28} />
-            ),
-            title: "Create New",
-          }}
-        />
-      )}
-      {authUser === "admin" && (
-        <Tab.Screen
-          component={Reviews}
-          name="reviews"
-          options={{
-            tabBarIcon: ({ color }) => (
-              <FeatherIcons color={color} name="star" size={28} />
-            ),
-            title: "Reviews",
-          }}
-        />
-      )}
-    </Tab.Navigator>
+      <Tabs.Screen
+        name="new-appointment"
+        options={{
+          headerTitle: "Create New Appointment",
+          tabBarIcon: ({ color }) => (
+            <FeatherIcons color={color} name="plus" size={28} />
+          ),
+          title: "Create New",
+          href: authUser !== "user" ? null : "/new-appointment",
+        }}
+      />
+      <Tabs.Screen
+        name="reviews"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <FeatherIcons color={color} name="star" size={28} />
+          ),
+          title: "Reviews",
+          href: authUser !== "admin" ? null : "/reviews",
+        }}
+      />
+      <Tabs.Screen
+        name="appointment"
+        options={{
+          headerLeft: () => (
+            <FeatherIcons
+              color="white"
+              onPress={backToAppts}
+              name="arrow-left"
+              size={28}
+            />
+          ),
+          tabBarItemStyle: { display: "none" },
+          title: "View Appointment",
+        }}
+      />
+    </Tabs>
   );
 }
 
