@@ -69,7 +69,7 @@ const seedData = async () => {
       INSERT INTO users (id, username, password, logged_in) VALUES (2, 'admin', 'password', 0);
     `);
   }
-  const rating: Rating | null = await db.getFirstAsync("SELECT * FROM users");
+  const rating: Rating | null = await db.getFirstAsync("SELECT * FROM reviews");
   if (rating === null) {
     await db.execAsync(`
       INSERT INTO reviews (sum, total, avg) VALUES (0, 0, 0.0);
