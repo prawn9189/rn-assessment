@@ -46,6 +46,7 @@ function NewAppointment() {
     clearErrors,
     control,
     handleSubmit,
+    resetField,
     setError,
     setValue,
     formState: { errors },
@@ -86,6 +87,15 @@ function NewAppointment() {
   };
 
   const dateFieldOnFocus = () => {
+    DateTimePickerAndroid.open({
+      value: new Date(),
+      mode: "date",
+      onChange: onDateChange,
+    });
+  };
+
+  const dateFieldOnPress = () => {
+    resetField("date");
     DateTimePickerAndroid.open({
       value: new Date(),
       mode: "date",
@@ -145,6 +155,7 @@ function NewAppointment() {
             className="w-full bg-slate-50 text-black"
             onFocus={dateFieldOnFocus}
             onBlur={onBlur}
+            onPress={dateFieldOnPress}
             onChangeText={onChange}
             placeholder="Date"
             value={value}
