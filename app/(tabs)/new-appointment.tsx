@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
@@ -42,8 +43,10 @@ const hours = Array.from({ length: 9 }).map((_v, index) => index + 9);
 
 function NewAppointment() {
   const {
+    clearErrors,
     control,
     handleSubmit,
+    setError,
     setValue,
     formState: { errors },
   } = useForm<z.infer<typeof schema>>({
@@ -61,7 +64,12 @@ function NewAppointment() {
 
   const onDateChange = (_event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate;
-    setValue("date", currentDate!.toLocaleDateString());
+    if (selectedDate && dayjs(selectedDate).isBefore(dayjs(), "day")) {
+      setError("date", { message: "Selected date cannot be older than the current date." });
+    } else {
+      setValue("date", currentDate!.toLocaleDateString());
+      clearErrors("date");
+    }
   };
 
   const createAppointment = async (data: z.infer<typeof schema>) => {
