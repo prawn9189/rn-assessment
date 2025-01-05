@@ -66,7 +66,9 @@ function NewAppointment() {
   const onDateChange = (_event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate;
     if (selectedDate && dayjs(selectedDate).isBefore(dayjs(), "day")) {
-      setError("date", { message: "Selected date cannot be older than the current date." });
+      setError("date", {
+        message: "Selected date cannot be older than the current date.",
+      });
     } else {
       setValue("date", currentDate!.toLocaleDateString());
       clearErrors("date");
