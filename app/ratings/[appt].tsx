@@ -33,7 +33,7 @@ function Rating() {
           rating={rating}
         />
         <Button className="mt-6" onPress={submitRating}>
-          <Text>Go abck</Text>
+          <Text>Go back</Text>
         </Button>
       </View>
     </SafeAreaView>
