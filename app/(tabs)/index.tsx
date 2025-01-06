@@ -1,6 +1,6 @@
 import { Redirect, useRouter, useSegments } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,7 +52,7 @@ function Appointments() {
   };
 
   return (
-    <View>
+    <ScrollView>
       {appts.length !== 0 &&
         appts.map((appt, index) => (
           <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
@@ -69,7 +69,55 @@ function Appointments() {
             </CardFooter>
           </Card>
         ))}
-    </View>
+      {appts.length !== 0 &&
+        appts.map((appt, index) => (
+          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
+            <CardHeader>
+              <CardTitle>{appt.patient}</CardTitle>
+            </CardHeader>
+            <CardFooter>
+              <Button
+                className="w-full"
+                onPress={() => viewAppt(appt.id as number)}
+              >
+                <Text>View</Text>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      {appts.length !== 0 &&
+        appts.map((appt, index) => (
+          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
+            <CardHeader>
+              <CardTitle>{appt.patient}</CardTitle>
+            </CardHeader>
+            <CardFooter>
+              <Button
+                className="w-full"
+                onPress={() => viewAppt(appt.id as number)}
+              >
+                <Text>View</Text>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      {appts.length !== 0 &&
+        appts.map((appt, index) => (
+          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
+            <CardHeader>
+              <CardTitle>{appt.patient}</CardTitle>
+            </CardHeader>
+            <CardFooter>
+              <Button
+                className="w-full"
+                onPress={() => viewAppt(appt.id as number)}
+              >
+                <Text>View</Text>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+    </ScrollView>
   );
 }
 
