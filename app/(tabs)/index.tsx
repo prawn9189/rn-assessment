@@ -69,54 +69,6 @@ function Appointments() {
             </CardFooter>
           </Card>
         ))}
-      {appts.length !== 0 &&
-        appts.map((appt, index) => (
-          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
-            <CardHeader>
-              <CardTitle>{appt.patient}</CardTitle>
-            </CardHeader>
-            <CardFooter>
-              <Button
-                className="w-full"
-                onPress={() => viewAppt(appt.id as number)}
-              >
-                <Text>View</Text>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      {appts.length !== 0 &&
-        appts.map((appt, index) => (
-          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
-            <CardHeader>
-              <CardTitle>{appt.patient}</CardTitle>
-            </CardHeader>
-            <CardFooter>
-              <Button
-                className="w-full"
-                onPress={() => viewAppt(appt.id as number)}
-              >
-                <Text>View</Text>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      {appts.length !== 0 &&
-        appts.map((appt, index) => (
-          <Card className="bg-zinc-800 mb-4 mx-4" key={index}>
-            <CardHeader>
-              <CardTitle>{appt.patient}</CardTitle>
-            </CardHeader>
-            <CardFooter>
-              <Button
-                className="w-full"
-                onPress={() => viewAppt(appt.id as number)}
-              >
-                <Text>View</Text>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
     </ScrollView>
   );
 }
